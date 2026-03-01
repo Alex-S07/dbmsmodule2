@@ -3,920 +3,1120 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DBMS Module 1 – Study Guide</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<title>DBMS Module 2 — Study Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=Lora:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #0e1117;
-    --surface: #161b27;
-    --card: #1e2537;
-    --border: #2a3352;
-    --accent: #4f8ef7;
-    --accent2: #f7934f;
-    --accent3: #4ff7a8;
-    --accent4: #f74f8e;
-    --text: #e8eaf6;
-    --muted: #7a88b0;
-    --yellow: #f7d84f;
+    --bg: #0f0e17;
+    --surface: #1a1828;
+    --surface2: #221f35;
+    --accent: #ff6b35;
+    --accent2: #a78bfa;
+    --accent3: #34d399;
+    --accent4: #fbbf24;
+    --text: #e8e6f0;
+    --muted: #9390a8;
+    --border: #2e2b45;
+    --code-bg: #13111e;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Outfit', sans-serif;
-    font-size: 15px;
-    line-height: 1.7;
-  }
-  /* TOP NAV */
-  .top-bar {
-    background: var(--surface);
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--bg); color:var(--text); font-family:'Lora',serif; line-height:1.7; }
+
+  /* HERO */
+  .hero {
+    background: linear-gradient(135deg, #1a0533 0%, #0f0e17 40%, #001a1a 100%);
+    padding: 60px 40px 50px;
     border-bottom: 1px solid var(--border);
-    padding: 14px 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    position: sticky; top: 0; z-index: 100;
+    position: relative; overflow: hidden;
   }
-  .top-bar h1 { font-size: 1rem; font-weight: 700; color: var(--accent); font-family: 'Space Mono', monospace; }
-  .top-bar span { font-size: 0.8rem; color: var(--muted); }
-  .badge { background: var(--accent); color: #fff; border-radius: 4px; padding: 2px 8px; font-size: 0.7rem; font-weight: 700; margin-left: auto; }
+  .hero::before {
+    content:''; position:absolute; top:-80px; right:-80px;
+    width:400px; height:400px; border-radius:50%;
+    background: radial-gradient(circle, rgba(167,139,250,0.12) 0%, transparent 70%);
+  }
+  .hero::after {
+    content:''; position:absolute; bottom:-60px; left:20%;
+    width:300px; height:300px; border-radius:50%;
+    background: radial-gradient(circle, rgba(255,107,53,0.08) 0%, transparent 70%);
+  }
+  .hero-tag { font-family:'DM Mono',monospace; font-size:12px; letter-spacing:3px; color:var(--accent); text-transform:uppercase; margin-bottom:12px; }
+  .hero h1 { font-family:'Syne',sans-serif; font-size:clamp(2rem,5vw,3.5rem); font-weight:800; line-height:1.1; }
+  .hero h1 span { color:var(--accent2); }
+  .hero p { color:var(--muted); font-size:1rem; margin-top:14px; max-width:600px; }
+  .topic-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:24px; }
+  .chip { font-family:'DM Mono',monospace; font-size:11px; padding:4px 12px; border-radius:20px; border:1px solid var(--border); color:var(--muted); background:var(--surface); cursor:pointer; transition:all .2s; }
+  .chip:hover, .chip.active { border-color:var(--accent2); color:var(--accent2); background:rgba(167,139,250,0.1); }
 
   /* LAYOUT */
-  .layout { display: flex; min-height: 100vh; }
-  .sidebar {
-    width: 240px; min-width: 240px;
-    background: var(--surface);
-    border-right: 1px solid var(--border);
-    padding: 20px 0;
-    position: sticky; top: 53px; height: calc(100vh - 53px);
-    overflow-y: auto;
-  }
-  .sidebar-title { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: var(--muted); padding: 0 20px 8px; }
-  .sidebar a {
-    display: block; padding: 8px 20px;
-    text-decoration: none; color: var(--muted);
-    font-size: 0.83rem; transition: all .2s;
-    border-left: 3px solid transparent;
-  }
-  .sidebar a:hover, .sidebar a.active { color: var(--accent); border-left-color: var(--accent); background: rgba(79,142,247,.07); }
-  .main { flex: 1; padding: 32px 40px; max-width: 960px; }
+  .container { max-width:1100px; margin:0 auto; padding:40px 20px; }
+  .grid { display:grid; grid-template-columns:220px 1fr; gap:30px; align-items:start; }
+  @media(max-width:700px){ .grid{grid-template-columns:1fr;} .sidebar{display:none;} }
 
-  /* SECTION */
-  .section { margin-bottom: 48px; scroll-margin-top: 70px; }
-  .section-header {
-    display: flex; align-items: center; gap: 12px;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid var(--border);
-  }
-  .section-num {
-    background: var(--accent);
-    color: #fff;
-    width: 32px; height: 32px;
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'Space Mono', monospace;
-    font-size: 0.8rem;
-    font-weight: 700;
-    flex-shrink: 0;
-  }
-  .section-num.orange { background: var(--accent2); }
-  .section-num.green  { background: var(--accent3); color: #000; }
-  .section-num.pink   { background: var(--accent4); }
-  .section-num.yellow { background: var(--yellow); color: #000; }
-  .section-title { font-size: 1.25rem; font-weight: 800; }
+  /* SIDEBAR */
+  .sidebar { position:sticky; top:20px; }
+  .sidebar-title { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--muted); margin-bottom:12px; }
+  .sidebar-nav a { display:block; font-family:'Syne',sans-serif; font-size:13px; padding:7px 12px; border-radius:6px; text-decoration:none; color:var(--muted); transition:all .2s; border-left:2px solid transparent; }
+  .sidebar-nav a:hover, .sidebar-nav a.active { color:var(--text); background:var(--surface); border-left-color:var(--accent); }
+
+  /* SECTIONS */
+  .section { margin-bottom:50px; scroll-margin-top:20px; }
+  .section-header { display:flex; align-items:center; gap:14px; margin-bottom:24px; }
+  .section-number { font-family:'DM Mono',monospace; font-size:11px; color:var(--accent); background:rgba(255,107,53,0.1); border:1px solid rgba(255,107,53,0.3); padding:3px 10px; border-radius:4px; white-space:nowrap; }
+  .section h2 { font-family:'Syne',sans-serif; font-size:1.6rem; font-weight:700; }
 
   /* CARDS */
-  .card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 18px 22px;
-    margin-bottom: 14px;
-  }
-  .card h3 {
-    font-size: 0.9rem;
-    font-weight: 700;
-    color: var(--accent);
-    margin-bottom: 8px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .card h3.orange { color: var(--accent2); }
-  .card h3.green  { color: var(--accent3); }
-  .card h3.pink   { color: var(--accent4); }
-  .card h3.yellow { color: var(--yellow); }
-  .card p { font-size: 0.9rem; color: var(--muted); margin-bottom: 4px; }
-  .card p strong { color: var(--text); }
+  .card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px 24px; margin-bottom:16px; transition:border-color .2s; }
+  .card:hover { border-color:var(--border); }
+  .card-title { font-family:'Syne',sans-serif; font-size:1rem; font-weight:700; margin-bottom:8px; display:flex; align-items:center; gap:8px; }
+  .card-title .badge { font-family:'DM Mono',monospace; font-size:10px; padding:2px 8px; border-radius:12px; }
+  .badge-blue { background:rgba(167,139,250,0.15); color:var(--accent2); }
+  .badge-green { background:rgba(52,211,153,0.15); color:var(--accent3); }
+  .badge-orange { background:rgba(255,107,53,0.15); color:var(--accent); }
+  .badge-yellow { background:rgba(251,191,36,0.15); color:var(--accent4); }
+  .card p, .card li { font-size:0.9rem; color:#c8c5d8; }
+  .card ul { padding-left:18px; }
+  .card ul li { margin-bottom:4px; }
+  .card strong { color:var(--text); }
 
-  /* MEMORY TRICK */
-  .memory {
-    background: linear-gradient(135deg, rgba(79,142,247,.12), rgba(79,247,168,.08));
-    border: 1px solid rgba(79,142,247,.3);
-    border-radius: 10px;
-    padding: 14px 18px;
-    margin-bottom: 14px;
-    display: flex; gap: 12px; align-items: flex-start;
-  }
-  .memory-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
-  .memory-text { font-size: 0.88rem; }
-  .memory-text strong { color: var(--accent3); }
+  /* COMPARISON TABLE */
+  .table-wrap { overflow-x:auto; margin:16px 0; }
+  table { width:100%; border-collapse:collapse; font-size:0.85rem; }
+  th { background:var(--surface2); font-family:'Syne',sans-serif; font-weight:600; padding:10px 14px; text-align:left; border-bottom:2px solid var(--border); color:var(--accent2); }
+  td { padding:9px 14px; border-bottom:1px solid var(--border); color:#c8c5d8; }
+  tr:hover td { background:rgba(255,255,255,0.02); }
 
-  /* TABLE */
-  table { width: 100%; border-collapse: collapse; margin-bottom: 14px; font-size: 0.87rem; }
-  th { background: rgba(79,142,247,.15); color: var(--accent); text-align: left; padding: 9px 12px; border: 1px solid var(--border); font-weight: 700; font-family: 'Space Mono', monospace; font-size: 0.75rem; }
-  td { padding: 8px 12px; border: 1px solid var(--border); color: var(--muted); }
-  td strong { color: var(--text); }
-  tr:hover td { background: rgba(79,142,247,.05); }
+  /* CODE */
+  code { font-family:'DM Mono',monospace; background:var(--code-bg); padding:1px 6px; border-radius:4px; font-size:0.82rem; color:#a5f3fc; border:1px solid rgba(165,243,252,0.1); }
+  pre { background:var(--code-bg); border:1px solid var(--border); border-radius:8px; padding:16px 20px; overflow-x:auto; margin:12px 0; }
+  pre code { background:none; border:none; padding:0; color:#a5f3fc; font-size:0.83rem; line-height:1.8; }
 
-  /* TAGS */
-  .tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
-  .tag {
-    background: rgba(79,142,247,.15);
-    color: var(--accent);
-    border: 1px solid rgba(79,142,247,.3);
-    border-radius: 20px;
-    padding: 3px 10px;
-    font-size: 0.78rem;
-    font-weight: 600;
-  }
-  .tag.orange { background: rgba(247,147,79,.15); color: var(--accent2); border-color: rgba(247,147,79,.3); }
-  .tag.green { background: rgba(79,247,168,.12); color: var(--accent3); border-color: rgba(79,247,168,.3); }
-  .tag.pink { background: rgba(247,79,142,.12); color: var(--accent4); border-color: rgba(247,79,142,.3); }
-  .tag.yellow { background: rgba(247,216,79,.12); color: var(--yellow); border-color: rgba(247,216,79,.3); }
-
-  /* GRID */
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
-  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 14px; }
-  @media (max-width: 700px) {
-    .grid2, .grid3 { grid-template-columns: 1fr; }
-    .sidebar { display: none; }
-    .main { padding: 20px 16px; }
-  }
+  /* MEMORY TRICKS */
+  .mnemo { background:linear-gradient(135deg, rgba(167,139,250,0.08), rgba(52,211,153,0.05)); border:1px solid rgba(167,139,250,0.2); border-radius:10px; padding:16px 20px; margin:14px 0; }
+  .mnemo-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:2px; text-transform:uppercase; color:var(--accent2); margin-bottom:6px; }
+  .mnemo p { font-size:0.88rem; color:#d4d0e8; }
+  .mnemo strong { color:var(--accent2); }
 
   /* HIGHLIGHT BOX */
-  .highlight {
-    border-left: 4px solid var(--accent);
-    padding: 12px 16px;
-    background: rgba(79,142,247,.07);
-    border-radius: 0 8px 8px 0;
-    margin-bottom: 14px;
-    font-size: 0.9rem;
-  }
-  .highlight.orange { border-color: var(--accent2); background: rgba(247,147,79,.07); }
-  .highlight.green  { border-color: var(--accent3); background: rgba(79,247,168,.07); }
-  .highlight.pink   { border-color: var(--accent4); background: rgba(247,79,142,.07); }
-  .highlight.yellow { border-color: var(--yellow); background: rgba(247,216,79,.07); }
+  .highlight { background:rgba(255,107,53,0.07); border-left:3px solid var(--accent); border-radius:0 8px 8px 0; padding:12px 18px; margin:12px 0; font-size:0.88rem; color:#d4d0e8; }
+  .highlight strong { color:var(--accent); }
 
-  /* QUICK FACTS */
-  .quick-list li { list-style: none; padding: 5px 0; font-size: 0.9rem; color: var(--muted); border-bottom: 1px solid rgba(255,255,255,.04); }
-  .quick-list li::before { content: "▸ "; color: var(--accent); font-size: 0.8rem; }
-  .quick-list li strong { color: var(--text); }
-  .quick-list.orange li::before { color: var(--accent2); }
-  .quick-list.green li::before  { color: var(--accent3); }
-  .quick-list.yellow li::before { color: var(--yellow); }
+  /* ALERT */
+  .alert { background:rgba(251,191,36,0.07); border:1px solid rgba(251,191,36,0.25); border-radius:8px; padding:12px 18px; margin:12px 0; font-size:0.88rem; color:#d4d0e8; }
+  .alert::before { content:'⚠ '; color:var(--accent4); font-weight:bold; }
 
-  /* ATTRIBUTE TYPE BLOCKS */
-  .attr-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-  .attr-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 12px 14px;
-    font-size: 0.84rem;
-  }
-  .attr-card .label { font-weight: 700; color: var(--accent3); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 4px; }
-  .attr-card .symbol { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--yellow); margin-bottom: 4px; }
+  /* FORMULA */
+  .formula { font-family:'DM Mono',monospace; background:var(--code-bg); border:1px solid rgba(52,211,153,0.2); border-radius:8px; padding:10px 16px; margin:8px 0; color:var(--accent3); font-size:0.88rem; display:inline-block; }
 
-  /* EXAM TIP */
-  .exam-tip {
-    background: rgba(247,216,79,.08);
-    border: 1px solid rgba(247,216,79,.25);
-    border-radius: 10px;
-    padding: 12px 16px;
-    margin-bottom: 14px;
-    font-size: 0.87rem;
-    display: flex; gap: 10px; align-items: flex-start;
-  }
-  .exam-tip::before { content: "📝"; flex-shrink: 0; }
+  /* ACCORDION */
+  details { border:1px solid var(--border); border-radius:10px; margin-bottom:10px; overflow:hidden; }
+  details[open] { border-color:var(--accent2); }
+  summary { padding:14px 18px; cursor:pointer; font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:600; list-style:none; display:flex; justify-content:space-between; align-items:center; background:var(--surface); }
+  summary::-webkit-details-marker { display:none; }
+  summary::after { content:'+'; color:var(--accent2); font-size:1.2rem; transition:transform .2s; }
+  details[open] summary::after { content:'−'; }
+  .details-body { padding:16px 20px; background:var(--surface2); font-size:0.88rem; color:#c8c5d8; }
+  .details-body p { margin-bottom:8px; }
+  .details-body ul { padding-left:18px; }
+  .details-body li { margin-bottom:6px; }
 
-  /* FLOW */
-  .flow { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin: 12px 0; font-size: 0.85rem; }
-  .flow-item { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; }
-  .flow-arrow { color: var(--muted); font-size: 1.1rem; }
+  /* JOIN VISUAL */
+  .join-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px,1fr)); gap:12px; margin:16px 0; }
+  .join-card { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:14px; text-align:center; }
+  .join-card .venn { font-size:2rem; margin-bottom:6px; }
+  .join-card .join-name { font-family:'Syne',sans-serif; font-size:0.85rem; font-weight:700; color:var(--accent2); }
+  .join-card .join-desc { font-size:0.78rem; color:var(--muted); margin-top:4px; }
+
+  /* PROGRESS BAR HEADER */
+  .progress-bar { height:2px; background:linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3)); width:100%; }
+
+  /* QUIZ CARDS */
+  .quiz-card { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px; margin-bottom:12px; }
+  .quiz-q { font-family:'Syne',sans-serif; font-size:0.95rem; font-weight:600; margin-bottom:12px; }
+  .quiz-options { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+  @media(max-width:500px){.quiz-options{grid-template-columns:1fr;}}
+  .quiz-btn { background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:10px 14px; cursor:pointer; font-size:0.83rem; color:var(--text); text-align:left; transition:all .2s; font-family:'Lora',serif; }
+  .quiz-btn:hover { border-color:var(--accent2); background:rgba(167,139,250,0.08); }
+  .quiz-btn.correct { border-color:var(--accent3); background:rgba(52,211,153,0.12); color:var(--accent3); }
+  .quiz-btn.wrong { border-color:#f87171; background:rgba(248,113,113,0.1); color:#f87171; }
+  .quiz-feedback { margin-top:10px; font-size:0.82rem; padding:8px 12px; border-radius:6px; display:none; }
+  .quiz-feedback.show { display:block; }
+  .quiz-feedback.ok { background:rgba(52,211,153,0.1); color:var(--accent3); }
+  .quiz-feedback.no { background:rgba(248,113,113,0.1); color:#f87171; }
+
+  /* FOOTER */
+  .footer { text-align:center; padding:40px 20px; color:var(--muted); font-size:0.8rem; border-top:1px solid var(--border); font-family:'DM Mono',monospace; }
 </style>
 </head>
 <body>
+<div class="progress-bar"></div>
 
-<div class="top-bar">
-  <h1>DBMS</h1>
-  <span>Module 1 – Complete Study Guide</span>
-  <div class="badge">EXAM READY</div>
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">DBMS — Module 2 Complete Study Guide</div>
+  <h1>Database <span>Management</span><br>Systems</h1>
+  <p>Full coverage of Relational Model, SQL, Views, Triggers, Joins, Relational Algebra & ER-to-Schema conversion — explained simply for fast memorization.</p>
+  <div class="topic-chips">
+    <span class="chip active" onclick="scrollTo('#rm')">Relational Model</span>
+    <span class="chip" onclick="scrollTo('#sql')">SQL Basics</span>
+    <span class="chip" onclick="scrollTo('#ddl')">DDL Commands</span>
+    <span class="chip" onclick="scrollTo('#dml')">DML Commands</span>
+    <span class="chip" onclick="scrollTo('#agg')">Aggregation</span>
+    <span class="chip" onclick="scrollTo('#views')">Views</span>
+    <span class="chip" onclick="scrollTo('#triggers')">Triggers</span>
+    <span class="chip" onclick="scrollTo('#joins')">JOINs</span>
+    <span class="chip" onclick="scrollTo('#ra')">Relational Algebra</span>
+    <span class="chip" onclick="scrollTo('#er')">ER → Schema</span>
+    <span class="chip" onclick="scrollTo('#rc')">Relational Calculus</span>
+    <span class="chip" onclick="scrollTo('#quiz')">Quick Quiz</span>
+  </div>
 </div>
 
-<div class="layout">
+<div class="container">
+<div class="grid">
 
-  <nav class="sidebar">
-    <div class="sidebar-title">Topics</div>
-    <a href="#s1">1. Database Basics</a>
-    <a href="#s2">2. Data Models</a>
-    <a href="#s3">3. Schema & Instances</a>
-    <a href="#s4">4. Three-Schema Architecture</a>
-    <a href="#s5">5. Data Independence</a>
-    <a href="#s6">6. Database Languages</a>
-    <a href="#s7">7. Client-Server Architecture</a>
-    <a href="#s8">8. ER Diagram Basics</a>
-    <a href="#s9">9. Entities & Weak Entities</a>
-    <a href="#s10">10. Attributes (All Types)</a>
-    <a href="#s11">11. Relationships & Degree</a>
-    <a href="#s12">12. Cardinality Ratios</a>
-    <a href="#s13">13. Participation Constraints</a>
-    <a href="#s14">14. Keys in DBMS</a>
-  </nav>
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-title">Topics</div>
+  <div class="sidebar-nav">
+    <a href="#rm">1. Relational Model</a>
+    <a href="#constraints">2. Integrity Constraints</a>
+    <a href="#sql">3. SQL Intro</a>
+    <a href="#ddl">4. DDL Commands</a>
+    <a href="#dml">5. DML Commands</a>
+    <a href="#select">6. SELECT Queries</a>
+    <a href="#agg">7. Aggregation</a>
+    <a href="#views">8. Views</a>
+    <a href="#triggers">9. Triggers</a>
+    <a href="#joins">10. JOINs (SQL)</a>
+    <a href="#er">11. ER → Schema</a>
+    <a href="#ra">12. Relational Algebra</a>
+    <a href="#rc">13. Relational Calculus</a>
+    <a href="#quiz">🧠 Quiz</a>
+  </div>
+</nav>
 
-  <main class="main">
+<!-- MAIN CONTENT -->
+<main>
 
-    <!-- ============ SECTION 1 ============ -->
-    <section class="section" id="s1">
-      <div class="section-header">
-        <div class="section-num">01</div>
-        <div class="section-title">Database & DBMS Basics</div>
-      </div>
+<!-- ======================== SECTION 1: RELATIONAL MODEL ======================== -->
+<section class="section" id="rm">
+  <div class="section-header">
+    <span class="section-number">01</span>
+    <h2>Relational Model</h2>
+  </div>
 
-      <div class="card">
-        <h3>What is a Database?</h3>
-        <ul class="quick-list">
-          <li>A <strong>centralized &amp; structured set of data</strong> stored on a computer</li>
-          <li>Allows <strong>retrieve, add, modify, delete</strong> data</li>
-          <li>Transforms data into <strong>useful information</strong></li>
-        </ul>
-      </div>
+  <div class="card">
+    <div class="card-title">Core Concept <span class="badge badge-blue">Foundation</span></div>
+    <p>The Relational Model represents a database as a <strong>collection of relations (tables)</strong>. Each row = a real-world entity or relationship. Each column = an attribute.</p>
+  </div>
 
-      <div class="card">
-        <h3>What is a DBMS?</h3>
-        <p><strong>DBMS = Software</strong> that controls storage, organization and retrieval of data.</p>
-        <p>It facilitates: <strong>Define</strong> (data types/constraints) → <strong>Load</strong> data → <strong>Query/Transaction</strong> → <strong>Protection &amp; Sharing</strong></p>
-      </div>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Informal Term</th><th>Formal Term</th><th>Meaning</th></tr>
+      <tr><td>Table</td><td>Relation</td><td>The whole table</td></tr>
+      <tr><td>Column header</td><td>Attribute</td><td>Name of a field</td></tr>
+      <tr><td>All possible column values</td><td>Domain</td><td>Valid value set for an attribute</td></tr>
+      <tr><td>Row</td><td>Tuple</td><td>One record</td></tr>
+      <tr><td>Table definition</td><td>Relation Schema</td><td>Structure: R(A1, A2, … An)</td></tr>
+    </table>
+  </div>
 
-      <div class="memory">
-        <div class="memory-icon">🧠</div>
-        <div class="memory-text">
-          <strong>Memory trick:</strong> Database = Library (stores all books). DBMS = Librarian (manages access, retrieval, returns).
-        </div>
-      </div>
+  <div class="card">
+    <div class="card-title">Key Terms to Remember</div>
+    <ul>
+      <li><strong>Degree</strong> — number of <em>attributes (columns)</em> in a relation</li>
+      <li><strong>Cardinality</strong> — number of <em>tuples (rows)</em> in a relation</li>
+      <li><strong>Schema Notation:</strong> EMPLOYEE (EmployeeId, FirstName, LastName, Salary)</li>
+    </ul>
+  </div>
 
-      <div class="card">
-        <h3>Simplified 3-Level Architecture (Quick Preview)</h3>
-        <table>
-          <tr><th>Level</th><th>What it describes</th><th>Example</th></tr>
-          <tr><td><strong>Physical</strong></td><td>HOW data is stored (on disk)</td><td>File structures, indexes</td></tr>
-          <tr><td><strong>Conceptual</strong></td><td>WHAT data is stored (entire DB)</td><td>Tables, relationships</td></tr>
-          <tr><td><strong>External/View</strong></td><td>HOW users SEE the data</td><td>Faculty sees student details</td></tr>
-        </table>
-      </div>
-    </section>
+  <div class="mnemo">
+    <div class="mnemo-label">🧠 Memory Trick</div>
+    <p><strong>"D for Columns, C for Rows"</strong> — <strong>D</strong>egree = <strong>D</strong>imension of columns | <strong>C</strong>ardinality = <strong>C</strong>ount of rows</p>
+  </div>
 
-    <!-- ============ SECTION 2 ============ -->
-    <section class="section" id="s2">
-      <div class="section-header">
-        <div class="section-num orange">02</div>
-        <div class="section-title">Data Models</div>
-      </div>
+  <div class="card">
+    <div class="card-title">Characteristics of a Relation <span class="badge badge-green">Rules</span></div>
+    <ul>
+      <li>Every relation must have a <strong>unique name</strong></li>
+      <li>No two attributes can have the <strong>same name</strong></li>
+      <li><strong>No duplicate tuples</strong> allowed</li>
+      <li>Each cell has exactly <strong>one atomic value</strong></li>
+      <li>Order of tuples and attributes <strong>does not matter</strong></li>
+    </ul>
+  </div>
+</section>
 
-      <div class="highlight orange">
-        A <strong>Data Model</strong> = Abstract model that shows how the final system will look. It organizes data in a certain format. Think of it like an architect's building plan!
-      </div>
+<!-- ======================== SECTION 2: INTEGRITY CONSTRAINTS ======================== -->
+<section class="section" id="constraints">
+  <div class="section-header">
+    <span class="section-number">02</span>
+    <h2>Relational Integrity Constraints</h2>
+  </div>
 
-      <div class="card">
-        <h3 class="orange">3 Categories of Data Models</h3>
-        <table>
-          <tr><th>Type</th><th>Answers</th><th>Created by</th></tr>
-          <tr><td><strong>Conceptual</strong></td><td>WHAT the system contains</td><td>Business stakeholders, Data Architects</td></tr>
-          <tr><td><strong>Logical</strong></td><td>HOW to implement (DBMS-independent)</td><td>Data Architects, Business Analysts</td></tr>
-          <tr><td><strong>Physical</strong></td><td>HOW to implement on a specific DBMS</td><td>DBAs and Developers</td></tr>
-        </table>
-      </div>
+  <div class="highlight"><strong>What are they?</strong> Pre-defined rules applied on tables to maintain validity, integrity, and consistency of data. Checked on every INSERT, DELETE, or UPDATE.</div>
 
-      <div class="memory">
-        <div class="memory-icon">🧠</div>
-        <div class="memory-text"><strong>CLP trick:</strong> <strong>C</strong>onceptual = <strong>C</strong>oncept (WHAT), <strong>L</strong>ogical = <strong>L</strong>ayout (HOW in theory), <strong>P</strong>hysical = <strong>P</strong>ractical (HOW in reality)</div>
-      </div>
+  <details>
+    <summary>1. Domain Constraints</summary>
+    <div class="details-body">
+      <p>Each attribute value must belong to its defined domain (e.g., integer, string, date).</p>
+      <p><strong>Example:</strong> Age can only be a positive integer. Entering "abc" would violate domain constraint.</p>
+    </div>
+  </details>
+  <details>
+    <summary>2. Entity Integrity Constraint</summary>
+    <div class="details-body">
+      <p>The <strong>primary key cannot be NULL</strong>. This is because primary key uniquely identifies each row.</p>
+      <p>Other attributes CAN be NULL, just not the primary key.</p>
+    </div>
+  </details>
+  <details>
+    <summary>3. Key Constraints</summary>
+    <div class="details-body">
+      <p>Keys uniquely identify entities. A table can have multiple candidate keys but only one <strong>primary key</strong>.</p>
+      <p>Primary key must be <strong>unique and not null</strong>.</p>
+    </div>
+  </details>
+  <details>
+    <summary>4. Referential Integrity Constraint</summary>
+    <div class="details-body">
+      <p>If a <strong>foreign key in Table A</strong> references the <strong>primary key of Table B</strong>, every foreign key value must either be NULL or exist in Table B.</p>
+      <p><strong>Example:</strong> If Dept_id in EMPLOYEE references DEPARTMENT, the department must actually exist in DEPARTMENT table.</p>
+    </div>
+  </details>
 
-      <div class="card">
-        <h3 class="orange">4 Types of Data Models</h3>
-        <table>
-          <tr><th>Model</th><th>Structure</th><th>Example Systems</th><th>Key Feature</th></tr>
-          <tr><td><strong>Hierarchical</strong></td><td>Tree (parent-child)</td><td>IBM IMS, Windows Registry</td><td>Single path access, oldest DBMS model</td></tr>
-          <tr><td><strong>Network</strong></td><td>Graph (record can have many parents)</td><td>TurboIMAGE, IDS</td><td>Extension of hierarchical</td></tr>
-          <tr><td><strong>Relational</strong></td><td>2D Tables (rows &amp; columns)</td><td>MySQL, Oracle, PostgreSQL, SQL Server</td><td>Most widely used</td></tr>
-          <tr><td><strong>ER Model</strong></td><td>Pictorial diagram (entities + relationships)</td><td>Used in design phase</td><td>High-level, easy to understand</td></tr>
-          <tr><td><strong>Object-Oriented</strong></td><td>Objects (data + relationship together)</td><td>ObjectStore, Gemstone</td><td>Closest to real-world</td></tr>
-        </table>
-      </div>
+  <div class="card" style="margin-top:18px;">
+    <div class="card-title">Violations on Operations</div>
+    <ul>
+      <li><strong>INSERT</strong> can violate all 4 constraints</li>
+      <li><strong>DELETE</strong> can only violate <em>referential integrity</em> (other tables reference deleted row)</li>
+      <li><strong>UPDATE</strong> can violate domain, entity, key, or referential constraints depending on which column is changed</li>
+    </ul>
+  </div>
 
-      <div class="memory">
-        <div class="memory-icon">🧠</div>
-        <div class="memory-text"><strong>H-N-R-E-O</strong> → <strong>H</strong>appy <strong>N</strong>etworks <strong>R</strong>un <strong>E</strong>xcellent <strong>O</strong>perations</div>
-      </div>
-    </section>
+  <div class="mnemo">
+    <div class="mnemo-label">🧠 Memory Trick — DELETE Violations</div>
+    <p>When you DELETE, choose: <strong>R</strong>estrict (reject), <strong>C</strong>ascade (delete related), <strong>S</strong>et Null — remember "<strong>RCS</strong>"</p>
+  </div>
+</section>
 
-    <!-- ============ SECTION 3 ============ -->
-    <section class="section" id="s3">
-      <div class="section-header">
-        <div class="section-num green">03</div>
-        <div class="section-title">Schema &amp; Instances</div>
-      </div>
+<!-- ======================== SECTION 3: SQL INTRO ======================== -->
+<section class="section" id="sql">
+  <div class="section-header">
+    <span class="section-number">03</span>
+    <h2>Introduction to SQL</h2>
+  </div>
+  <div class="card">
+    <div class="card-title">History <span class="badge badge-yellow">Origins</span></div>
+    <p>SQL was developed at <strong>IBM</strong> by <strong>Donald D. Chamberlin</strong> and <strong>Raymond F. Boyce</strong> in the early 1970s. Originally called <strong>SEQUEL</strong> (Structured English QUEry Language).</p>
+    <p style="margin-top:8px;">Purpose: <strong>Update, store, manipulate, and retrieve</strong> data in relational databases.</p>
+  </div>
 
-      <div class="grid2">
-        <div class="card">
-          <h3 class="green">Schema (Intension)</h3>
-          <p>= The <strong>skeleton/structure</strong> of the database (description, not data)</p>
-          <p>Contains: tables, foreign keys, primary keys, views, data types, stored procedures</p>
-          <p style="margin-top:8px; font-size:0.82rem; color: var(--accent3);">Changes <strong>very infrequently</strong></p>
-        </div>
-        <div class="card">
-          <h3 class="green">Instance (Extension)</h3>
-          <p>= The <strong>actual data</strong> stored in the database at a particular moment</p>
-          <p>Also called: <strong>database state</strong>, occurrence, or snapshot</p>
-          <p style="margin-top:8px; font-size:0.82rem; color: var(--accent3);">Changes <strong>every time data is updated</strong></p>
-        </div>
-      </div>
-
-      <div class="memory">
-        <div class="memory-icon">🧠</div>
-        <div class="memory-text"><strong>Schema = Blueprint of a house</strong> (the design never changes much). <strong>Instance = The house today</strong> (furniture/people change daily).</div>
-      </div>
-
-      <div class="card">
-        <h3 class="green">States Explained</h3>
-        <ul class="quick-list green">
-          <li><strong>Initial State</strong> – Data when first loaded into the system</li>
-          <li><strong>Valid State</strong> – State that satisfies all structure &amp; constraints</li>
-          <li><strong>Database State</strong> – Content at any moment in time</li>
-        </ul>
-      </div>
-
-      <div class="exam-tip">Schema = <strong>intension</strong>, State/Instance = <strong>extension</strong> — these exact terms appear in exams!</div>
-    </section>
-
-    <!-- ============ SECTION 4 ============ -->
-    <section class="section" id="s4">
-      <div class="section-header">
-        <div class="section-num pink">04</div>
-        <div class="section-title">Three-Schema Architecture</div>
-      </div>
-
-      <div class="highlight pink">
-        Defines DBMS schemas at <strong>3 levels</strong> to separate user view from physical storage.
-      </div>
-
-      <div class="card">
-        <h3 class="pink">The Three Levels</h3>
-        <table>
-          <tr><th>Level</th><th>Schema Name</th><th>Data Model Used</th><th>Describes</th></tr>
-          <tr><td><strong>Internal</strong></td><td>Internal Schema</td><td>Physical data model</td><td>Physical storage structures &amp; access paths (indexes)</td></tr>
-          <tr><td><strong>Conceptual</strong></td><td>Conceptual Schema</td><td>Conceptual / implementation model</td><td>Structure &amp; constraints for the whole DB (community of users)</td></tr>
-          <tr><td><strong>External</strong></td><td>External Schema (Views)</td><td>Same as conceptual</td><td>Various user views</td></tr>
-        </table>
-      </div>
-
-      <div class="card">
-        <h3 class="pink">Mappings</h3>
-        <p>Programs reference <strong>external schema</strong> → mapped by DBMS to <strong>internal schema</strong> → data extracted &amp; reformatted back to user's <strong>external view</strong>.</p>
-      </div>
-
-      <div class="memory">
-        <div class="memory-icon">🧠</div>
-        <div class="memory-text"><strong>I-C-E:</strong> <strong>I</strong>nternal (storage), <strong>C</strong>onceptual (structure), <strong>E</strong>xternal (user view). Ice is cold — just like storage.</div>
-      </div>
-    </section>
-
-    <!-- ============ SECTION 5 ============ -->
-    <section class="section" id="s5">
-      <div class="section-header">
-        <div class="section-num yellow">05</div>
-        <div class="section-title">Data Independence</div>
-      </div>
-
-      <div class="highlight yellow">
-        <strong>Data Independence</strong> = Ability to modify schema at one level <em>without affecting</em> the schema at the next higher level. Data is separated from programs.
-      </div>
-
-      <div class="grid2">
-        <div class="card">
-          <h3 class="yellow">Physical Data Independence</h3>
-          <p>Change <strong>internal schema</strong> without changing the <strong>conceptual schema</strong>.</p>
-          <div class="tags" style="margin-top:10px">
-            <span class="tag yellow">Reorganize files</span>
-            <span class="tag yellow">New indexes</span>
-            <span class="tag yellow">Change data structures</span>
-            <span class="tag yellow">Change access method</span>
-            <span class="tag yellow">Compression changes</span>
-            <span class="tag yellow">Move DB location</span>
-          </div>
-        </div>
-        <div class="card">
-          <h3 class="yellow">Logical Data Independence</h3>
-          <p>Change <strong>conceptual schema</strong> without changing the <strong>external schemas</strong> or application programs.</p>
-          <div class="tags" style="margin-top:10px">
-            <span class="tag yellow">Add/modify/delete attributes</span>
-            <span class="tag yellow">Add new entity</span>
-            <span class="tag yellow">Merge two records</span>
-            <span class="tag yellow">Split record into two</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="memory">
-        <div class="memory-icon">🧠</div>
-        <div class="memory-text"><strong>Physical</strong> = changing the <strong>filing cabinet</strong> (how things are stored) without changing what documents exist. <strong>Logical</strong> = adding a new <strong>document type</strong> without changing what users see.</div>
-      </div>
-    </section>
-
-    <!-- ============ SECTION 6 ============ -->
-    <section class="section" id="s6">
-      <div class="section-header">
-        <div class="section-num">06</div>
-        <div class="section-title">Database Languages</div>
-      </div>
-
-      <div class="memory">
-        <div class="memory-icon">🧠</div>
-        <div class="memory-text"><strong>DDL-DML-DCL-TCL-SDL-VDL</strong> → <strong>D</strong>efinitely <strong>D</strong>o <strong>D</strong>ata <strong>C</strong>ontrol <strong>T</strong>ransactions <strong>S</strong>toring <strong>V</strong>iews</div>
-      </div>
-
+  <div class="card">
+    <div class="card-title">SQL Data Types (Domain Types)</div>
+    <div class="table-wrap">
       <table>
-        <tr><th>Language</th><th>Full Name</th><th>Purpose</th><th>Key Commands</th></tr>
-        <tr><td><strong>DDL</strong></td><td>Data Definition Language</td><td>Define DB structure/schema</td><td>CREATE, ALTER, DROP, TRUNCATE, RENAME, COMMENT</td></tr>
-        <tr><td><strong>DML</strong></td><td>Data Manipulation Language</td><td>Read &amp; update data</td><td>SELECT, INSERT, UPDATE, DELETE, MERGE, CALL, EXPLAIN PLAN, LOCK TABLE</td></tr>
-        <tr><td><strong>DCL</strong></td><td>Data Control Language</td><td>Rights &amp; permissions</td><td>GRANT, REVOKE</td></tr>
-        <tr><td><strong>TCL</strong></td><td>Transaction Control Language</td><td>Manage transactions</td><td>COMMIT, ROLLBACK, SAVEPOINT, SET TRANSACTION</td></tr>
-        <tr><td><strong>SDL</strong></td><td>Storage Definition Language</td><td>Specify internal schema</td><td>(No separate language in most RDBMS — handled by parameters)</td></tr>
-        <tr><td><strong>VDL</strong></td><td>View Definition Language</td><td>Define user views</td><td>In most RDBMS, SQL/DDL is used (CREATE VIEW)</td></tr>
+        <tr><th>Type</th><th>Description</th></tr>
+        <tr><td><code>char(n)</code></td><td>Fixed-length character string of length n</td></tr>
+        <tr><td><code>varchar(n)</code></td><td>Variable-length string, max n chars</td></tr>
+        <tr><td><code>int</code></td><td>Integer (machine-dependent size)</td></tr>
+        <tr><td><code>smallint</code></td><td>Small integer</td></tr>
+        <tr><td><code>numeric(p,d)</code></td><td>p total digits, d after decimal point</td></tr>
+        <tr><td><code>real / double</code></td><td>Floating point numbers</td></tr>
+        <tr><td><code>float(n)</code></td><td>Float with at least n digit precision</td></tr>
       </table>
+    </div>
+  </div>
+</section>
 
-      <div class="exam-tip">
-        DDL changes the <strong>structure</strong>. DML changes the <strong>data</strong>. DCL controls <strong>access</strong>. TCL controls <strong>transactions</strong>. SDL = internal storage. VDL = user views (both usually handled by DDL/SQL in practice).
-      </div>
+<!-- ======================== SECTION 4: DDL ======================== -->
+<section class="section" id="ddl">
+  <div class="section-header">
+    <span class="section-number">04</span>
+    <h2>DDL — Data Definition Language</h2>
+  </div>
+  <div class="highlight"><strong>DDL</strong> deals with the <em>structure/schema</em> of the database. It defines how tables are created, modified, and deleted.</div>
 
-      <div class="grid2">
-        <div class="card">
-          <h3>DDL Commands Explained</h3>
-          <ul class="quick-list">
-            <li><strong>CREATE</strong> – Create new objects (tables, views)</li>
-            <li><strong>ALTER</strong> – Modify existing structure</li>
-            <li><strong>DROP</strong> – Delete objects from DB</li>
-            <li><strong>TRUNCATE</strong> – Remove all records (space also freed)</li>
-            <li><strong>RENAME</strong> – Rename an object</li>
-            <li><strong>COMMENT</strong> – Add comments to data dictionary</li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3>TCL Commands Explained</h3>
-          <ul class="quick-list">
-            <li><strong>COMMIT</strong> – Save work done permanently</li>
-            <li><strong>ROLLBACK</strong> – Undo changes since last COMMIT</li>
-            <li><strong>SAVEPOINT</strong> – Mark a point to roll back to</li>
-            <li><strong>SET TRANSACTION</strong> – Change transaction options (isolation level etc.)</li>
-          </ul>
-        </div>
-      </div>
-    </section>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Command</th><th>Purpose</th><th>Quick Example</th></tr>
+      <tr><td><code>CREATE</code></td><td>Create database or table</td><td><code>CREATE TABLE Student(...);</code></td></tr>
+      <tr><td><code>DROP</code></td><td>Delete entire table/database</td><td><code>DROP TABLE Student;</code></td></tr>
+      <tr><td><code>ALTER</code></td><td>Modify table structure</td><td><code>ALTER TABLE t ADD col INT;</code></td></tr>
+      <tr><td><code>TRUNCATE</code></td><td>Remove all rows, keep structure</td><td><code>TRUNCATE TABLE Student;</code></td></tr>
+      <tr><td><code>RENAME</code></td><td>Rename object</td><td><code>ALTER TABLE t RENAME TO t2;</code></td></tr>
+    </table>
+  </div>
 
-    <!-- ============ SECTION 7 ============ -->
-    <section class="section" id="s7">
-      <div class="section-header">
-        <div class="section-num orange">07</div>
-        <div class="section-title">Centralized &amp; Client/Server Architectures</div>
-      </div>
+  <details>
+    <summary>CREATE TABLE — Syntax & Example</summary>
+    <div class="details-body">
+<pre><code>CREATE TABLE instructor (
+  ID        char(5),
+  name      varchar(20) NOT NULL,
+  dept_name varchar(20),
+  salary    numeric(8,2),
+  PRIMARY KEY (ID),
+  FOREIGN KEY (dept_name) REFERENCES department
+);</code></pre>
+      <ul>
+        <li><strong>NOT NULL</strong> — field cannot be empty</li>
+        <li><strong>PRIMARY KEY</strong> — unique identifier</li>
+        <li><strong>FOREIGN KEY ... REFERENCES</strong> — links to another table</li>
+      </ul>
+    </div>
+  </details>
 
-      <div class="grid2">
-        <div class="card">
-          <h3 class="orange">Centralized Architecture</h3>
-          <p>All processing done on a <strong>single central computer</strong> (mainframe). Terminals just display output.</p>
-          <p style="color:var(--accent2); font-size:0.8rem; margin-top:8px">Used in: Old mainframe systems</p>
-        </div>
-        <div class="card">
-          <h3 class="orange">Client/Server Architecture</h3>
-          <p>Work is distributed between <strong>clients</strong> (request services) and <strong>servers</strong> (provide services).</p>
-          <ul class="quick-list orange">
-            <li><strong>2-tier:</strong> Client talks directly to DB server</li>
-            <li><strong>3-tier:</strong> Client → App Server → DB Server (most common web architecture)</li>
-          </ul>
-        </div>
-      </div>
+  <details>
+    <summary>DROP vs TRUNCATE — Key Difference</summary>
+    <div class="details-body">
+      <ul>
+        <li><strong>DROP</strong> — Deletes table AND its structure. <em>Cannot be rolled back.</em></li>
+        <li><strong>TRUNCATE</strong> — Removes all rows but <em>keeps the table structure</em>. Faster than DELETE.</li>
+        <li>Neither DROP nor TRUNCATE requires a WHERE clause.</li>
+      </ul>
+    </div>
+  </details>
 
-      <div class="memory">
-        <div class="memory-icon">🧠</div>
-        <div class="memory-text"><strong>Restaurant analogy:</strong> Centralized = one chef does everything. Client/Server = Customer (client) orders from Waiter (app server) who gets food from Kitchen (DB server).</div>
-      </div>
-    </section>
+  <details>
+    <summary>ALTER — ADD, DROP, MODIFY, RENAME</summary>
+    <div class="details-body">
+<pre><code>-- ADD a column
+ALTER TABLE Student ADD (AGE number(3), COURSE varchar(40));
 
-    <!-- ============ SECTION 8 ============ -->
-    <section class="section" id="s8">
-      <div class="section-header">
-        <div class="section-num green">08</div>
-        <div class="section-title">ER Diagram Basics</div>
-      </div>
+-- DROP a column
+ALTER TABLE Student DROP COLUMN COURSE;
 
-      <div class="highlight green">
-        <strong>ER Diagram</strong> (Entity Relationship Diagram / ERD) = Visual tool showing the logical structure of a database using entities, attributes, and relationships.
-      </div>
+-- MODIFY column type
+ALTER TABLE Student MODIFY COURSE varchar(20);  -- Oracle/MySQL
 
-      <div class="card">
-        <h3 class="green">3 Core Components</h3>
-        <table>
-          <tr><th>Component</th><th>Notation</th><th>Description</th><th>Example</th></tr>
-          <tr><td><strong>Entity</strong></td><td>Rectangle □</td><td>A real-world thing or concept</td><td>Student, Course, Teacher</td></tr>
-          <tr><td><strong>Attribute</strong></td><td>Oval ○</td><td>Property/characteristic of an entity</td><td>Name, Age, Roll_no</td></tr>
-          <tr><td><strong>Relationship</strong></td><td>Diamond ◇</td><td>Association between entities</td><td>Student "Enrolled in" Course</td></tr>
-        </table>
-      </div>
+-- RENAME table
+ALTER TABLE Student RENAME TO Learner;
 
-      <div class="memory">
-        <div class="memory-icon">🧠</div>
-        <div class="memory-text"><strong>R-O-D:</strong> <strong>R</strong>ectangle = entity, <strong>O</strong>val = attribute, <strong>D</strong>iamond = relationship. <strong>R</strong>eal things in <strong>R</strong>ectangles!</div>
-      </div>
-    </section>
+-- RENAME column (MySQL/Oracle)
+ALTER TABLE Student RENAME COLUMN old_name TO new_name;</code></pre>
+    </div>
+  </details>
 
-    <!-- ============ SECTION 9 ============ -->
-    <section class="section" id="s9">
-      <div class="section-header">
-        <div class="section-num pink">09</div>
-        <div class="section-title">Entities, Entity Types &amp; Weak Entities</div>
-      </div>
+  <div class="mnemo">
+    <div class="mnemo-label">🧠 DDL Memory Trick</div>
+    <p><strong>"CDATR"</strong> = <strong>C</strong>reate, <strong>D</strong>rop, <strong>A</strong>lter, <strong>T</strong>runcate, <strong>R</strong>ename — <em>"Can Data Always Take Rest?"</em></p>
+  </div>
+</section>
 
-      <div class="grid2">
-        <div class="card">
-          <h3 class="pink">Strong Entity</h3>
-          <p>Has its own <strong>primary key</strong> (independent existence). Represented by a <strong>single rectangle</strong>.</p>
-          <div class="tags" style="margin-top:8px">
-            <span class="tag pink">Person</span><span class="tag pink">Car</span><span class="tag pink">Department</span>
-          </div>
-        </div>
-        <div class="card">
-          <h3 class="pink">Weak Entity</h3>
-          <p>Depends on a strong entity. <strong>No primary key of its own.</strong> Has a <strong>partial key (discriminator)</strong>. Represented by a <strong>double rectangle</strong>.</p>
-          <div class="tags" style="margin-top:8px">
-            <span class="tag pink">Order_Item (depends on Order)</span><span class="tag pink">Dependent (depends on Employee)</span>
-          </div>
-        </div>
-      </div>
+<!-- ======================== SECTION 5: DML ======================== -->
+<section class="section" id="dml">
+  <div class="section-header">
+    <span class="section-number">05</span>
+    <h2>DML — Data Manipulation Language</h2>
+  </div>
+  <div class="highlight"><strong>DML</strong> is for working with the <em>data inside</em> tables — selecting, inserting, updating, deleting rows.</div>
 
-      <div class="card">
-        <h3 class="pink">Entity Types vs Entity Sets</h3>
-        <ul class="quick-list">
-          <li><strong>Entity Type</strong> = Collection of entities with similar attributes. Defined by name + set of attributes. (Superset)</li>
-          <li><strong>Entity Set</strong> = Collection of same type entities whose attributes are the same at a given time.</li>
-          <li>We draw <strong>entity types</strong> in ER diagrams (not individual entities)</li>
-        </ul>
-      </div>
+  <details>
+    <summary>INSERT — Adding Records</summary>
+    <div class="details-body">
+<pre><code>-- With column names
+INSERT INTO Customers (CustomerName, City, Country) 
+VALUES ('Cardinal', 'Stavanger', 'Norway');
 
-      <div class="card">
-        <h3 class="pink">Types of Entities by Existence</h3>
-        <table>
-          <tr><th>Type</th><th>Description</th><th>Example</th></tr>
-          <tr><td><strong>Tangible</strong></td><td>Exists physically in real world</td><td>Person, Car, Building</td></tr>
-          <tr><td><strong>Intangible</strong></td><td>Exists only logically, no physical presence</td><td>Bank Account, Policy</td></tr>
-        </table>
-      </div>
+-- Without column names (all columns, in order)
+INSERT INTO Customers VALUES (92, 'Cardinal', 'Tom', 'Skagen 21', 'Stavanger', '4006', 'Norway');
 
-      <div class="exam-tip">Weak entity uses <strong>double rectangle</strong>; weak relationship uses <strong>double diamond</strong>. The weak entity's key = <strong>partial key + primary key of owning entity</strong>.</div>
-    </section>
+-- Multiple rows (some databases)
+INSERT INTO STUDENT(ID, NAME, AGE) VALUES
+  (1, 'Amit', 15),
+  (2, 'Gauri', 18);</code></pre>
+      <p>⚠ Unspecified columns get <strong>NULL</strong> values automatically.</p>
+    </div>
+  </details>
 
-    <!-- ============ SECTION 10 ============ -->
-    <section class="section" id="s10">
-      <div class="section-header">
-        <div class="section-num yellow">10</div>
-        <div class="section-title">Attributes – All Types</div>
-      </div>
+  <details>
+    <summary>UPDATE — Modifying Records</summary>
+    <div class="details-body">
+<pre><code>-- Update specific row(s)
+UPDATE Customers
+SET ContactName = 'Alfred Schmidt', City = 'Frankfurt'
+WHERE CustomerID = 1;
 
-      <div class="highlight yellow">
-        An <strong>attribute</strong> is a real-world property of an entity. Each attribute has a <strong>domain</strong> (set of permitted values). Each attribute = one column in a relational table.
-      </div>
+-- Update multiple rows
+UPDATE Customers SET ContactName='Juan' WHERE Country='Mexico';
 
-      <div class="attr-grid">
-        <div class="attr-card">
-          <div class="label">Simple Attribute</div>
-          <div class="symbol">○ Plain oval</div>
-          <p>Cannot be divided further. Atomic value.</p>
-          <p style="color:var(--muted); font-size:0.8rem">Ex: Roll_no, Age</p>
-        </div>
-        <div class="attr-card">
-          <div class="label">Composite Attribute</div>
-          <div class="symbol">○—○ Oval connected to ovals</div>
-          <p>Can be divided into sub-attributes.</p>
-          <p style="color:var(--muted); font-size:0.8rem">Ex: Name → First, Middle, Last</p>
-        </div>
-        <div class="attr-card">
-          <div class="label">Single-Valued Attribute</div>
-          <div class="symbol">○ Plain oval</div>
-          <p>Holds only ONE value for an entity.</p>
-          <p style="color:var(--muted); font-size:0.8rem">Ex: Section of Student</p>
-        </div>
-        <div class="attr-card">
-          <div class="label">Multi-Valued Attribute</div>
-          <div class="symbol">◎ Double oval</div>
-          <p>Can hold MORE THAN ONE value.</p>
-          <p style="color:var(--muted); font-size:0.8rem">Ex: Email addresses, Phone numbers</p>
-        </div>
-        <div class="attr-card">
-          <div class="label">Stored Attribute</div>
-          <div class="symbol">○ Plain oval</div>
-          <p>Value provided by user. Cannot be derived. Used to calculate derived attributes.</p>
-          <p style="color:var(--muted); font-size:0.8rem">Ex: Date of Birth (DOB)</p>
-        </div>
-        <div class="attr-card">
-          <div class="label">Derived Attribute</div>
-          <div class="symbol">○ Dashed oval</div>
-          <p>Value derived/calculated from another attribute. Changes over time.</p>
-          <p style="color:var(--muted); font-size:0.8rem">Ex: Age (derived from DOB)</p>
-        </div>
-        <div class="attr-card">
-          <div class="label">Key Attribute</div>
-          <div class="symbol">○ Oval with underlined text</div>
-          <p>Uniquely identifies entities. Represents the primary key.</p>
-          <p style="color:var(--muted); font-size:0.8rem">Ex: Roll_no of Student</p>
-        </div>
-        <div class="attr-card">
-          <div class="label">Non-Key Attribute</div>
-          <div class="symbol">○ Plain oval</div>
-          <p>All attributes except the key attribute. Can have same value for multiple entities.</p>
-          <p style="color:var(--muted); font-size:0.8rem">Ex: Class, Section, Name</p>
-        </div>
-      </div>
+-- ⚠ No WHERE = ALL rows updated!
+UPDATE Customers SET ContactName='Juan';</code></pre>
+    </div>
+  </details>
 
-      <div class="card">
-        <h3 class="yellow">Null-Valued Attribute</h3>
-        <p>Attributes that can hold a <strong>NULL value</strong> (no value / unknown). Ex: Mobile_no of a person who has no phone.</p>
-      </div>
+  <details>
+    <summary>DELETE — Removing Records</summary>
+    <div class="details-body">
+<pre><code>-- Delete specific row
+DELETE FROM Customers WHERE CustomerName='Alfreds Futterkiste';
 
-      <div class="memory">
-        <div class="memory-icon">🧠</div>
-        <div class="memory-text">
-          <strong>Notation summary:</strong> Double oval = Multi-valued | Dashed oval = Derived | Underlined text = Key | Oval-to-ovals = Composite
-        </div>
-      </div>
-    </section>
+-- Delete all rows (table remains)
+DELETE FROM Customers;</code></pre>
+      <p>⚠ Omitting WHERE deletes ALL rows. Unlike TRUNCATE, DELETE can be rolled back.</p>
+    </div>
+  </details>
 
-    <!-- ============ SECTION 11 ============ -->
-    <section class="section" id="s11">
-      <div class="section-header">
-        <div class="section-num">11</div>
-        <div class="section-title">Relationships, Degree &amp; Relationship Sets</div>
-      </div>
+  <div class="mnemo">
+    <div class="mnemo-label">🧠 DML Memory Trick</div>
+    <p>DML = <strong>"I USED Data"</strong> → <strong>I</strong>nsert, <strong>U</strong>pdate, <strong>S</strong>elect (querying), <strong>E</strong>rase/Delete</p>
+  </div>
+</section>
 
-      <div class="card">
-        <h3>Relationship Type vs Relationship Set</h3>
-        <ul class="quick-list">
-          <li><strong>Relationship Type</strong> = The association between entity types. Represented by a <strong>diamond ◇</strong>. Has a Name, Degree, and Cardinality Ratio.</li>
-          <li><strong>Relationship Set</strong> = Set of relationships of the same type. Ex: All instances of WORKS_FOR between EMPLOYEE and DEPARTMENT.</li>
-        </ul>
-      </div>
+<!-- ======================== SECTION 6: SELECT ======================== -->
+<section class="section" id="select">
+  <div class="section-header">
+    <span class="section-number">06</span>
+    <h2>SELECT Queries</h2>
+  </div>
 
-      <div class="card">
-        <h3>Degree of a Relationship</h3>
-        <p style="margin-bottom:12px">Degree = Number of entity types participating in a relationship.</p>
-        <table>
-          <tr><th>Degree</th><th>Name</th><th>Description</th><th>Example</th></tr>
-          <tr><td><strong>1</strong></td><td>Unary</td><td>Both participating entity types are the SAME</td><td>Student "manages" Student (club lead)</td></tr>
-          <tr><td><strong>2</strong></td><td>Binary</td><td>Exactly two entity types participate</td><td>Employee WORKS_FOR Department</td></tr>
-          <tr><td><strong>3</strong></td><td>Ternary</td><td>Exactly three entity types participate</td><td>Group takes Class in Room at Time</td></tr>
-          <tr><td><strong>N</strong></td><td>N-ary</td><td>N entity types participate</td><td>Complex scenarios</td></tr>
-        </table>
-      </div>
+  <div class="card">
+    <div class="card-title">Basic Structure</div>
+<pre><code>SELECT A1, A2, ..., An    -- columns to show
+FROM   r1, r2, ..., rm   -- tables
+WHERE  P;                 -- condition</code></pre>
+    <p style="margin-top:8px;">Each of SELECT, FROM, WHERE corresponds to a relational algebra operation.</p>
+  </div>
 
-      <div class="memory">
-        <div class="memory-icon">🧠</div>
-        <div class="memory-text"><strong>Binary is most common</strong> and easiest to convert to tables. Higher degree = more complex conversion. Always prefer binary in ER diagrams!</div>
-      </div>
-    </section>
+  <div class="table-wrap">
+    <table>
+      <tr><th>Clause</th><th>Relational Algebra Equivalent</th></tr>
+      <tr><td>SELECT</td><td>Projection (∏)</td></tr>
+      <tr><td>WHERE</td><td>Selection (σ)</td></tr>
+      <tr><td>FROM (multiple tables)</td><td>Cartesian Product (×)</td></tr>
+    </table>
+  </div>
 
-    <!-- ============ SECTION 12 ============ -->
-    <section class="section" id="s12">
-      <div class="section-header">
-        <div class="section-num orange">12</div>
-        <div class="section-title">Cardinality Ratios</div>
-      </div>
+  <details>
+    <summary>SELECT Clause — Key Variants</summary>
+    <div class="details-body">
+<pre><code>-- All attributes
+SELECT * FROM instructor;
 
-      <div class="highlight orange">
-        <strong>Cardinality</strong> = Number of instances of one entity that can be associated with instances of another entity through a relationship.
-        <br>Directed line (→) = "one" | Undirected line (—) = "many"
-      </div>
+-- Specific columns
+SELECT name, salary FROM instructor;
 
-      <div class="card">
-        <h3 class="orange">4 Types of Cardinality</h3>
-        <table>
-          <tr><th>Type</th><th>Meaning</th><th>Classic Example</th></tr>
-          <tr><td><strong>One-to-One (1:1)</strong></td><td>One record in Table A ↔ exactly one in Table B</td><td>Person ↔ Passport</td></tr>
-          <tr><td><strong>One-to-Many (1:N)</strong></td><td>One record in A → many in B, but each B has one A</td><td>Customer → multiple Accounts</td></tr>
-          <tr><td><strong>Many-to-One (N:1)</strong></td><td>Same as above, viewed from B's perspective</td><td>Multiple Accounts → one Customer</td></tr>
-          <tr><td><strong>Many-to-Many (M:N)</strong></td><td>Many in A ↔ many in B</td><td>Customer ↔ Product (buy)</td></tr>
-        </table>
-      </div>
+-- Remove duplicates
+SELECT DISTINCT dept_name FROM instructor;
 
-      <div class="memory">
-        <div class="memory-icon">🧠</div>
-        <div class="memory-text">
-          <strong>Exam trick for M:N:</strong> A many-to-many relationship requires a <strong>linking/junction table</strong> that holds the primary keys of BOTH related tables.
-        </div>
-      </div>
+-- Arithmetic in SELECT
+SELECT ID, name, salary/12 AS monthly_salary FROM instructor;
 
-      <div class="card">
-        <h3 class="orange">Practice Homework Cardinalities</h3>
-        <table>
-          <tr><th>Relationship</th><th>Cardinality</th><th>Reasoning</th></tr>
-          <tr><td>Prime minister → Country</td><td><strong>1:1</strong></td><td>One PM per country, one country per PM</td></tr>
-          <tr><td>Classroom → Students</td><td><strong>1:N</strong></td><td>One classroom has many students</td></tr>
-          <tr><td>Students → Classroom</td><td><strong>N:1</strong></td><td>Many students in one classroom</td></tr>
-          <tr><td>Customer → Loan</td><td><strong>1:N or M:N</strong></td><td>Customer can have many loans; each loan belongs to one customer (1:N)</td></tr>
-        </table>
-      </div>
-    </section>
+-- SQL is case-insensitive: Name = NAME = name</code></pre>
+    </div>
+  </details>
 
-    <!-- ============ SECTION 13 ============ -->
-    <section class="section" id="s13">
-      <div class="section-header">
-        <div class="section-num green">13</div>
-        <div class="section-title">Participation Constraints</div>
-      </div>
+  <details>
+    <summary>WHERE Clause — Filtering</summary>
+    <div class="details-body">
+<pre><code>-- Single condition
+SELECT name FROM instructor WHERE dept_name = 'Comp. Sci.';
 
-      <div class="highlight green">
-        Participation Constraints specify whether the existence of an entity depends on being related to another entity. Defines <strong>min/max</strong> relationship instances.
-      </div>
+-- Multiple conditions with AND/OR/NOT
+SELECT name FROM instructor 
+WHERE dept_name = 'Comp. Sci.' AND salary > 80000;
 
-      <div class="grid2">
-        <div class="card">
-          <h3 class="green">Partial Participation</h3>
-          <p><strong>NOT all</strong> entities of the entity type must participate in the relationship.</p>
-          <p>Represented by a <strong>single line</strong> between entity and relationship.</p>
-          <p style="margin-top:8px; color:var(--accent3); font-size:0.83rem">Example: A Customer may or may not have placed an Order. (Some customers have no orders.)</p>
-        </div>
-        <div class="card">
-          <h3 class="green">Total Participation</h3>
-          <p><strong>ALL</strong> entities of the entity type must participate in the relationship.</p>
-          <p>Represented by a <strong>double parallel line</strong> between entity and relationship.</p>
-          <p style="margin-top:8px; color:var(--accent3); font-size:0.83rem">Example: Every Order must be placed by a Customer. (Every order MUST have a customer.)</p>
-        </div>
-      </div>
+-- ORDER BY (sort results)
+SELECT * FROM customers ORDER BY Name ASC;   -- ascending
+SELECT * FROM customers ORDER BY Salary DESC; -- descending</code></pre>
+    </div>
+  </details>
+</section>
 
-      <div class="memory">
-        <div class="memory-icon">🧠</div>
-        <div class="memory-text"><strong>Double line = Total (mandatory)</strong>. Single line = Partial (optional). Think: <strong>Double = definitely must participate</strong>. Usually exists between a <strong>strong entity and weak entity</strong>.</div>
-      </div>
-    </section>
+<!-- ======================== SECTION 7: AGGREGATION ======================== -->
+<section class="section" id="agg">
+  <div class="section-header">
+    <span class="section-number">07</span>
+    <h2>Aggregation, GROUP BY & HAVING</h2>
+  </div>
 
-    <!-- ============ SECTION 14 ============ -->
-    <section class="section" id="s14">
-      <div class="section-header">
-        <div class="section-num pink">14</div>
-        <div class="section-title">Keys in DBMS</div>
-      </div>
-
-      <div class="highlight pink">Keys uniquely identify records (tuples) in a table and establish relationships between tables.</div>
-
+  <div class="card">
+    <div class="card-title">Aggregate Functions</div>
+    <div class="table-wrap">
       <table>
-        <tr><th>Key Type</th><th>Definition</th><th>Example</th></tr>
-        <tr>
-          <td><strong>Primary Key</strong></td>
-          <td>Uniquely identifies ONE instance of an entity. Chosen from candidate keys. Most suitable.</td>
-          <td>Employee_ID in Employee table</td>
-        </tr>
-        <tr>
-          <td><strong>Foreign Key</strong></td>
-          <td>Field in one table that refers to the PRIMARY KEY of another table. Creates relationship between tables.</td>
-          <td>Department_ID in Employee table (references Department table)</td>
-        </tr>
-        <tr>
-          <td><strong>Super Key</strong></td>
-          <td>Any set of attributes that can uniquely identify a tuple. Superset of candidate key.</td>
-          <td>{Employee_ID}, {Employee_ID, Name}, {Name, SSN}</td>
-        </tr>
-        <tr>
-          <td><strong>Candidate Key</strong></td>
-          <td>Attribute(s) that CAN uniquely identify a tuple. As strong as primary key. (Non-primary candidates)</td>
-          <td>SSN, Passport_no, License_no in Employee table</td>
-        </tr>
-        <tr>
-          <td><strong>Composite Key</strong></td>
-          <td>Primary key made of MORE THAN ONE attribute.</td>
-          <td>(Emp_ID + Emp_Role + Project_ID) together</td>
-        </tr>
-        <tr>
-          <td><strong>Surrogate / Artificial Key</strong></td>
-          <td>Artificially generated key (auto-increment). Used when natural primary key is large/complex.</td>
-          <td>Student_ID INT AUTO_INCREMENT in Student table</td>
-        </tr>
+        <tr><th>Function</th><th>What it does</th><th>Ignores NULL?</th></tr>
+        <tr><td><code>COUNT(col)</code></td><td>Count non-null values in column</td><td>✅ Yes</td></tr>
+        <tr><td><code>COUNT(*)</code></td><td>Count ALL rows including NULLs</td><td>❌ No</td></tr>
+        <tr><td><code>COUNT(DISTINCT col)</code></td><td>Count unique non-null values</td><td>✅ Yes</td></tr>
+        <tr><td><code>SUM(col)</code></td><td>Total of all values</td><td>✅ Yes</td></tr>
+        <tr><td><code>AVG(col)</code></td><td>Average of values</td><td>✅ Yes</td></tr>
+        <tr><td><code>MAX(col)</code></td><td>Highest value</td><td>✅ Yes</td></tr>
+        <tr><td><code>MIN(col)</code></td><td>Lowest value</td><td>✅ Yes</td></tr>
       </table>
+    </div>
+  </div>
 
-      <div class="memory">
-        <div class="memory-icon">🧠</div>
-        <div class="memory-text">
-          <strong>Key Hierarchy:</strong> Super Key ⊇ Candidate Key ⊇ Primary Key<br>
-          <strong>P-F-S-C-C-S:</strong> <strong>P</strong>rimary, <strong>F</strong>oreign, <strong>S</strong>uper, <strong>C</strong>andidate, <strong>C</strong>omposite, <strong>S</strong>urrogate → <strong>"Pretty Fine Students Can Choose Subjects"</strong>
-        </div>
-      </div>
+  <details>
+    <summary>GROUP BY — Grouping Records</summary>
+    <div class="details-body">
+<pre><code>-- Count customers per country
+SELECT COUNT(Id), Country
+FROM Customer
+GROUP BY Country;
 
-      <div class="exam-tip">
-        All Candidate Keys are Super Keys, but NOT all Super Keys are Candidate Keys. The Primary Key is one Candidate Key chosen by the developer. Foreign Key = referential integrity.
-      </div>
+-- With ORDER BY
+SELECT COUNT(Id), Country
+FROM Customer
+GROUP BY Country
+ORDER BY COUNT(Id) DESC;</code></pre>
+      <p>GROUP BY returns <strong>one row per group</strong>. Always used with aggregate functions.</p>
+    </div>
+  </details>
 
-      <!-- QUICK REVISION CARDS -->
-      <div class="card" style="margin-top:20px">
-        <h3 class="pink">Quick Code Reference – Surrogate Key</h3>
-        <pre style="background:var(--bg); border-radius:8px; padding:12px; font-family:'Space Mono',monospace; font-size:0.8rem; color: var(--accent3); overflow-x:auto">CREATE TABLE Student (
-    Student_ID INT AUTO_INCREMENT PRIMARY KEY,
-    Name VARCHAR(50),
-    Phone VARCHAR(15)
-);</pre>
-        <p style="margin-top:8px; font-size:0.82rem; color:var(--muted)">Here <strong style="color:var(--text)">Student_ID</strong> is the surrogate key — automatically assigned, has no real-world meaning.</p>
-      </div>
-    </section>
+  <details>
+    <summary>HAVING — Filtering Groups</summary>
+    <div class="details-body">
+      <p><strong>HAVING</strong> is like WHERE but for <em>groups</em> (after GROUP BY). WHERE filters individual rows; HAVING filters group results.</p>
+<pre><code>-- Countries with more than 10 customers
+SELECT COUNT(Id), Country FROM Customer
+GROUP BY Country
+HAVING COUNT(Id) > 10;
 
-    <!-- ===== FINAL CHEAT SHEET ===== -->
-    <section class="section" id="cheat">
-      <div class="section-header">
-        <div class="section-num" style="background: linear-gradient(135deg, var(--accent), var(--accent4))">★</div>
-        <div class="section-title">⚡ Ultimate Quick Revision Cheat Sheet</div>
-      </div>
+-- Exclude USA, only countries with ≥9 customers
+SELECT COUNT(Id), Country FROM Customer
+WHERE Country <> 'USA'
+GROUP BY Country
+HAVING COUNT(Id) >= 9
+ORDER BY COUNT(Id) DESC;</code></pre>
+    </div>
+  </details>
 
-      <div class="grid2">
-        <div class="card">
-          <h3>ER Diagram Notation</h3>
-          <ul class="quick-list">
-            <li><strong>Rectangle</strong> = Entity</li>
-            <li><strong>Double Rectangle</strong> = Weak Entity</li>
-            <li><strong>Oval</strong> = Attribute</li>
-            <li><strong>Double Oval</strong> = Multi-valued Attribute</li>
-            <li><strong>Dashed Oval</strong> = Derived Attribute</li>
-            <li><strong>Underlined in Oval</strong> = Key Attribute</li>
-            <li><strong>Diamond</strong> = Relationship</li>
-            <li><strong>Double Diamond</strong> = Identifying Relationship (for weak entity)</li>
-            <li><strong>Single line</strong> = Partial Participation</li>
-            <li><strong>Double line</strong> = Total Participation</li>
-          </ul>
-        </div>
-        <div class="card">
-          <h3>Famous Examples to Remember</h3>
-          <ul class="quick-list">
-            <li><strong>1:1</strong> – Person : Passport</li>
-            <li><strong>1:N</strong> – Customer : Account</li>
-            <li><strong>N:1</strong> – Account : Customer</li>
-            <li><strong>M:N</strong> – Customer : Product</li>
-            <li><strong>Unary</strong> – Employee manages Employee</li>
-            <li><strong>Weak Entity</strong> – Dependent of Employee</li>
-            <li><strong>Derived</strong> – Age derived from DOB</li>
-            <li><strong>Composite</strong> – Name = First+Middle+Last</li>
-            <li><strong>Multi-valued</strong> – Multiple email addresses</li>
-            <li><strong>Foreign Key</strong> – Department_ID in Employee</li>
-          </ul>
-        </div>
-      </div>
+  <div class="mnemo">
+    <div class="mnemo-label">🧠 ORDER of Clauses (MUST MEMORIZE)</div>
+    <p><strong>SELECT → FROM → WHERE → GROUP BY → HAVING → ORDER BY</strong></p>
+    <p style="margin-top:6px;"><em>"Some Friendly Whales Give Hot Orders"</em></p>
+  </div>
+</section>
 
-      <div class="card">
-        <h3>Data Model Types – One-Line Memory</h3>
-        <table>
-          <tr><th>Model</th><th>One-Line Definition</th></tr>
-          <tr><td><strong>Hierarchical</strong></td><td>Tree structure, parent-child, single path — oldest, used in IMS & Windows Registry</td></tr>
-          <tr><td><strong>Network</strong></td><td>Like hierarchical but one record can have MULTIPLE parents</td></tr>
-          <tr><td><strong>Relational</strong></td><td>2D tables (rows & columns) — most widely used (MySQL, Oracle)</td></tr>
-          <tr><td><strong>ER Model</strong></td><td>Pictorial (entities, attributes, relationships) — used in design stage</td></tr>
-          <tr><td><strong>Object-Oriented</strong></td><td>Data + relationship = one object — closest to real world</td></tr>
-        </table>
-      </div>
+<!-- ======================== SECTION 8: VIEWS ======================== -->
+<section class="section" id="views">
+  <div class="section-header">
+    <span class="section-number">08</span>
+    <h2>Views (Virtual Tables)</h2>
+  </div>
 
-      <div class="card">
-        <h3>Three-Schema Architecture – One Line Each</h3>
-        <table>
-          <tr><th>Schema</th><th>Level</th><th>Description</th></tr>
-          <tr><td><strong>Internal</strong></td><td>Physical level</td><td>HOW data is physically stored (indexes, file structures)</td></tr>
-          <tr><td><strong>Conceptual</strong></td><td>Logical level</td><td>WHAT data exists and its constraints (for all users)</td></tr>
-          <tr><td><strong>External</strong></td><td>View level</td><td>HOW individual users see the data (user views)</td></tr>
-        </table>
-        <div class="memory" style="margin-top:12px">
-          <div class="memory-icon">🧠</div>
-          <div class="memory-text"><strong>Physical independence</strong> = change internal, conceptual stays same. <strong>Logical independence</strong> = change conceptual, external views stay same.</div>
-        </div>
-      </div>
-    </section>
+  <div class="card">
+    <div class="card-title">What is a View? <span class="badge badge-blue">Virtual Table</span></div>
+    <ul>
+      <li>A <strong>virtual table</strong> derived from one or more base tables</li>
+      <li>Does <strong>NOT store actual data</strong> — only stores the query definition in data dictionary</li>
+      <li>Computed dynamically every time it's queried</li>
+      <li>Changes to base table are <strong>reflected in the view</strong></li>
+    </ul>
+  </div>
 
-  </main>
+  <details>
+    <summary>CREATE VIEW</summary>
+    <div class="details-body">
+<pre><code>-- Create a view
+CREATE VIEW [Brazil Customers] AS
+SELECT CustomerName, ContactName
+FROM Customers
+WHERE Country = 'Brazil';
+
+-- Query the view just like a table
+SELECT * FROM [Brazil Customers];</code></pre>
+    </div>
+  </details>
+
+  <details>
+    <summary>DROP VIEW & UPDATE VIEW</summary>
+    <div class="details-body">
+<pre><code>-- Delete a view
+DROP VIEW [Brazil Customers];
+
+-- Update data through a view
+UPDATE agentview
+SET commission = .13
+WHERE working_area = 'London';</code></pre>
+    </div>
+  </details>
+
+  <details>
+    <summary>When can a View be UPDATED?</summary>
+    <div class="details-body">
+      <ul>
+        <li>Based on exactly <strong>one table</strong></li>
+        <li>Includes the <strong>PRIMARY KEY</strong> of that table</li>
+        <li>No <strong>aggregate functions</strong></li>
+        <li>No <strong>DISTINCT</strong></li>
+        <li>No <strong>GROUP BY or HAVING</strong></li>
+        <li>No <strong>subqueries</strong></li>
+        <li>No constants or expressions in output columns</li>
+      </ul>
+    </div>
+  </details>
+
+  <div class="card">
+    <div class="card-title">Uses of Views</div>
+    <ul>
+      <li><strong>Restrict data access</strong> — show only allowed rows/columns</li>
+      <li><strong>Hide complexity</strong> — hide multi-table joins</li>
+      <li><strong>Simplify queries</strong> — users don't need to know how joins work</li>
+      <li><strong>Store complex queries</strong> — reuse them easily</li>
+      <li><strong>Rename columns</strong> — without affecting base tables</li>
+      <li><strong>Multiple views</strong> — different views of same table for different users</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ======================== SECTION 9: TRIGGERS ======================== -->
+<section class="section" id="triggers">
+  <div class="section-header">
+    <span class="section-number">09</span>
+    <h2>Triggers</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-title">What is a Trigger? <span class="badge badge-orange">Automatic</span></div>
+    <p>A trigger is SQL code that <strong>automatically executes</strong> when a specific event occurs on a table. Used to maintain data integrity.</p>
+    <p style="margin-top:8px;"><em>Think: automatic welcome email when user is inserted → that logic would be a trigger.</em></p>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Trigger Events</div>
+    <ul>
+      <li><strong>DML events:</strong> INSERT, UPDATE, DELETE</li>
+      <li><strong>DDL events:</strong> CREATE, ALTER, DROP</li>
+      <li><strong>Database events:</strong> LOGON, LOGOFF, STARTUP, SHUTDOWN</li>
+    </ul>
+  </div>
+
+  <details>
+    <summary>Trigger Syntax</summary>
+    <div class="details-body">
+<pre><code>CREATE TRIGGER [trigger_name]
+[BEFORE | AFTER]
+{INSERT | UPDATE | DELETE} ON [table_name]
+[FOR EACH ROW]
+[trigger_body];</code></pre>
+      <ul>
+        <li><strong>BEFORE</strong> — runs BEFORE the DML statement executes</li>
+        <li><strong>AFTER</strong> — runs AFTER the DML statement executes</li>
+        <li><strong>FOR EACH ROW</strong> — trigger fires once per affected row</li>
+        <li><strong>NEW</strong> — refers to the new/updated row value</li>
+        <li><strong>OLD</strong> — refers to the original row value</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>Trigger Example — Auto-calculate total marks</summary>
+    <div class="details-body">
+<pre><code>CREATE TRIGGER stud_marks
+BEFORE INSERT ON Student
+FOR EACH ROW
+SET Student.total = Student.subj1 + Student.subj2 + Student.subj3,
+    Student.per = Student.total * 60 / 100;</code></pre>
+      <p>This trigger fires before any INSERT into Student, auto-calculating total and percentage.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Trigger Example — Insert log after insert</summary>
+    <div class="details-body">
+<pre><code>DELIMITER //
+CREATE TRIGGER after_insert_details
+AFTER INSERT ON student
+FOR EACH ROW
+BEGIN
+  INSERT INTO student_detail VALUES (NEW.rno, CURTIME());
+END //
+DELIMITER ;</code></pre>
+      <p><strong>DELIMITER</strong> is used because MySQL needs to distinguish the trigger body from regular statements.</p>
+    </div>
+  </details>
+
+  <div class="mnemo">
+    <div class="mnemo-label">🧠 Memory Trick</div>
+    <p><strong>BEFORE = Preview</strong> (check/modify before saving) | <strong>AFTER = Review</strong> (react after saving) | <strong>NEW</strong> = incoming | <strong>OLD</strong> = previous</p>
+  </div>
+</section>
+
+<!-- ======================== SECTION 10: SQL JOINS ======================== -->
+<section class="section" id="joins">
+  <div class="section-header">
+    <span class="section-number">10</span>
+    <h2>SQL JOINs</h2>
+  </div>
+
+  <div class="join-grid">
+    <div class="join-card">
+      <div class="venn">🔵🔴</div>
+      <div class="join-name">INNER JOIN</div>
+      <div class="join-desc">Only matching rows from BOTH tables</div>
+    </div>
+    <div class="join-card">
+      <div class="venn">🔵⬛🔴</div>
+      <div class="join-name">LEFT JOIN</div>
+      <div class="join-desc">All left table rows + matching right rows</div>
+    </div>
+    <div class="join-card">
+      <div class="venn">⬛🔴🔵</div>
+      <div class="join-name">RIGHT JOIN</div>
+      <div class="join-desc">All right table rows + matching left rows</div>
+    </div>
+    <div class="join-card">
+      <div class="venn">🔵🔴🔵</div>
+      <div class="join-name">FULL JOIN</div>
+      <div class="join-desc">All rows from BOTH tables</div>
+    </div>
+  </div>
+
+  <details>
+    <summary>INNER JOIN Syntax & Example</summary>
+    <div class="details-body">
+<pre><code>SELECT OrderNumber, TotalAmount, FirstName, LastName
+FROM Order
+INNER JOIN Customer ON Order.CustomerId = Customer.Id;
+-- INNER keyword is optional</code></pre>
+    </div>
+  </details>
+
+  <details>
+    <summary>LEFT JOIN — Include customers with no orders</summary>
+    <div class="details-body">
+<pre><code>SELECT OrderNumber, TotalAmount, FirstName, LastName
+FROM Customer C
+LEFT JOIN Order O ON O.CustomerId = C.Id
+ORDER BY TotalAmount;
+-- Customers with no orders appear with NULL in Order columns</code></pre>
+    </div>
+  </details>
+
+  <details>
+    <summary>RIGHT JOIN — Customers who never ordered</summary>
+    <div class="details-body">
+<pre><code>SELECT TotalAmount, FirstName, LastName
+FROM [Order] O
+RIGHT JOIN Customer C ON O.CustomerId = C.Id
+WHERE TotalAmount IS NULL;
+-- Shows only customers with no orders</code></pre>
+    </div>
+  </details>
+
+  <details>
+    <summary>FULL JOIN — All customers & suppliers by country</summary>
+    <div class="details-body">
+<pre><code>SELECT C.FirstName, C.Country AS CustomerCountry,
+       S.Country AS SupplierCountry, S.CompanyName
+FROM Customer C
+FULL JOIN Supplier S ON C.Country = S.Country
+ORDER BY C.Country, S.Country;</code></pre>
+    </div>
+  </details>
+
+  <div class="mnemo">
+    <div class="mnemo-label">🧠 Join Memory Trick</div>
+    <p><strong>LEFT = Keep Left</strong> | <strong>RIGHT = Keep Right</strong> | <strong>INNER = Keep Middle</strong> | <strong>FULL = Keep All</strong></p>
+  </div>
+</section>
+
+<!-- ======================== SECTION 11: ER TO SCHEMA ======================== -->
+<section class="section" id="er">
+  <div class="section-header">
+    <span class="section-number">11</span>
+    <h2>ER Diagram → Relational Schema</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-title">7 Conversion Steps <span class="badge badge-green">Step-by-Step</span></div>
+    <div class="table-wrap">
+      <table>
+        <tr><th>Step</th><th>What to do</th></tr>
+        <tr><td>Step 1</td><td><strong>Strong Entity</strong> → Table with all simple attributes. Select primary key.</td></tr>
+        <tr><td>Step 2</td><td><strong>Weak Entity</strong> → Table + include strong entity's PK as FK. PK = FK + discriminator.</td></tr>
+        <tr><td>Step 3</td><td><strong>1:1 Relationship</strong> → Add PK of one side as FK in the other. Choose the total-participation side.</td></tr>
+        <tr><td>Step 4</td><td><strong>1:N Relationship</strong> → Add PK of "1" side as FK in the "N" side table.</td></tr>
+        <tr><td>Step 5</td><td><strong>M:N Relationship</strong> → Create new junction table. PK of both sides become FKs. Combined FKs = PK of new table.</td></tr>
+        <tr><td>Step 6</td><td><strong>Multivalued Attribute</strong> → Create separate table with PK of parent as FK. PK = FK + attribute.</td></tr>
+        <tr><td>Step 7</td><td><strong>N-ary Relationship</strong> → Create new table. Include PKs of all entities as FKs. Combined FKs = PK.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="mnemo">
+    <div class="mnemo-label">🧠 Steps Memory Trick</div>
+    <p><strong>"Strong Weak 1:1 1:N M:N Multi N-ary"</strong> → <em>"Some Walruses Love Lounging, Making Many New plans"</em></p>
+  </div>
+
+  <details>
+    <summary>Quick Examples for Each Step</summary>
+    <div class="details-body">
+      <p><strong>Multivalued (Phone):</strong></p>
+      <p>PERSON(<u>personid</u>, name, dob, gender)<br>PERSON_PHONE(<u>personid</u>, <u>phone</u>)</p>
+      <p style="margin-top:12px;"><strong>1:1 (Person–Wife):</strong></p>
+      <p>PERSON(<u>personid</u>, name, dob, gender, wifeid)<br>WIFE(<u>wifeid</u>, name)</p>
+      <p style="margin-top:12px;"><strong>1:N (Person–House):</strong></p>
+      <p>PERSON(<u>personid</u>, name)<br>HOUSE(<u>houseid</u>, personid, number, address) ← FK in N-side</p>
+      <p style="margin-top:12px;"><strong>M:N (Scientist–Invention):</strong></p>
+      <p>SCIENTIST(<u>SID</u>, name)<br>INVENTION(<u>IID</u>, name)<br>INVENTS(<u>SID</u>, <u>IID</u>) ← Junction table</p>
+    </div>
+  </details>
+</section>
+
+<!-- ======================== SECTION 12: RELATIONAL ALGEBRA ======================== -->
+<section class="section" id="ra">
+  <div class="section-header">
+    <span class="section-number">12</span>
+    <h2>Relational Algebra</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-title">What is it? <span class="badge badge-blue">Procedural</span></div>
+    <p>A <strong>procedural query language</strong> — you tell the system <em>what AND how</em> to retrieve. Input = relation, Output = relation. Works on whole tables at once (no loops).</p>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <tr><th>Operator</th><th>Symbol</th><th>What it does</th><th>SQL Equivalent</th></tr>
+      <tr><td>Project</td><td>∏</td><td>Select specific COLUMNS (removes duplicates)</td><td>SELECT col1, col2</td></tr>
+      <tr><td>Select</td><td>σ</td><td>Filter ROWS by condition</td><td>WHERE condition</td></tr>
+      <tr><td>Union</td><td>∪</td><td>Combine rows from two compatible relations</td><td>UNION</td></tr>
+      <tr><td>Set Difference</td><td>−</td><td>Rows in R1 but NOT in R2</td><td>EXCEPT</td></tr>
+      <tr><td>Intersection</td><td>∩</td><td>Rows common to BOTH</td><td>INTERSECT</td></tr>
+      <tr><td>Cross Product</td><td>×</td><td>All combinations of rows from both tables</td><td>FROM t1, t2</td></tr>
+      <tr><td>Natural Join</td><td>⋈</td><td>Join on common attribute, remove duplicate col</td><td>NATURAL JOIN</td></tr>
+      <tr><td>Theta Join</td><td>⋈θ</td><td>Join on any comparison condition</td><td>JOIN ON condition</td></tr>
+      <tr><td>Rename</td><td>ρ</td><td>Rename relation or attribute</td><td>AS alias</td></tr>
+    </table>
+  </div>
+
+  <details>
+    <summary>Project (∏) — Column Selection</summary>
+    <div class="details-body">
+      <div class="formula">∏ Name, Age (Employee)</div>
+      <p>Retrieves only Name and Age columns from Employee. Duplicates are automatically removed.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Select (σ) — Row Filtering</summary>
+    <div class="details-body">
+      <div class="formula">σ age > 26 (Employee)</div>
+      <p>Selects only rows where age > 26. To display results, combine with Project:</p>
+      <div class="formula">∏ Name, Salary (σ age > 26 (Employee))</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Outer Joins in Relational Algebra</summary>
+    <div class="details-body">
+      <ul>
+        <li><strong>Left Outer Join (⟕)</strong> — All tuples from LEFT + matching from RIGHT (NULLs for unmatched right)</li>
+        <li><strong>Right Outer Join (⟖)</strong> — All tuples from RIGHT + matching from LEFT</li>
+        <li><strong>Full Outer Join (⟗)</strong> — All tuples from BOTH, NULLs where no match</li>
+      </ul>
+    </div>
+  </details>
+
+  <details>
+    <summary>Example Queries</summary>
+    <div class="details-body">
+      <p><strong>List year and title of each book:</strong></p>
+      <div class="formula">πYear, Title(BOOKS)</div>
+      <p style="margin-top:10px;"><strong>Students in CS major:</strong></p>
+      <div class="formula">σMajor='CS'(STUDENTS)</div>
+      <p style="margin-top:10px;"><strong>Books published by McGraw-Hill before 1990:</strong></p>
+      <div class="formula">π(σPublisher='McGraw-Hill' ∧ Year&lt;1990(BOOKS))</div>
+      <p style="margin-top:10px;"><strong>Students older than 30 NOT in CS:</strong></p>
+      <div class="formula">πStName(σAge>30(STUDENTS)) − πStName(σMajor='CS'(STUDENTS))</div>
+    </div>
+  </details>
+
+  <div class="mnemo">
+    <div class="mnemo-label">🧠 ∏ vs σ</div>
+    <p><strong>∏ = Pi = Projection = Picks columns</strong> (P for Projection/Picks) | <strong>σ = Sigma = Selection = Selects rows</strong> (S for Selection/Rows)</p>
+  </div>
+</section>
+
+<!-- ======================== SECTION 13: RELATIONAL CALCULUS ======================== -->
+<section class="section" id="rc">
+  <div class="section-header">
+    <span class="section-number">13</span>
+    <h2>Relational Calculus</h2>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Key Difference from Relational Algebra <span class="badge badge-yellow">Non-Procedural</span></div>
+    <p>Relational Calculus is <strong>declarative</strong> — you specify <em>what</em> you want, not <em>how</em> to get it. There are two types:</p>
+  </div>
+
+  <details>
+    <summary>Tuple Relational Calculus (TRC)</summary>
+    <div class="details-body">
+      <p>Based on <strong>tuple variables</strong> that take values of entire tuples from a relation.</p>
+      <div class="formula">{ T | P(T) }</div>
+      <p>T = tuple variable, P(T) = condition</p>
+      <p style="margin-top:10px;"><strong>Examples:</strong></p>
+      <p>Books with price > 30:</p>
+      <div class="formula">{ T | BOOK(T) ∧ T.Price > 30 }</div>
+      <p>Author details for 'Lewis Ian':</p>
+      <div class="formula">{ T.City, T.Phone | AUTHOR(T) ∧ T.Aname = "Lewis Ian" }</div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Domain Relational Calculus (DRC)</summary>
+    <div class="details-body">
+      <p>Based on <strong>domain variables</strong> that range over values of individual attributes (not whole tuples).</p>
+      <div class="formula">{ X1, X2, ... | P(X1, X2, ...) }</div>
+      <p style="margin-top:10px;"><strong>Example — Publishers in New York:</strong></p>
+      <div class="formula">{ p1, p2, p4 | ∃p3 ∃p5 ∃p6 (PUBLISHER(p1,p2,p3,p4,p5,p6) ∧ p3="NewYork") }</div>
+      <p>Here p1, p2, p3... represent individual attribute values (domain variables).</p>
+    </div>
+  </details>
+
+  <div class="table-wrap">
+    <table>
+      <tr><th></th><th>Relational Algebra</th><th>Tuple Calculus</th><th>Domain Calculus</th></tr>
+      <tr><td>Type</td><td>Procedural</td><td>Non-Procedural</td><td>Non-Procedural</td></tr>
+      <tr><td>Variables</td><td>Relations/Operations</td><td>Tuple variables</td><td>Domain (attribute) variables</td></tr>
+      <tr><td>Specifies</td><td>What + How</td><td>What only</td><td>What only</td></tr>
+    </table>
+  </div>
+</section>
+
+<!-- ======================== QUIZ SECTION ======================== -->
+<section class="section" id="quiz">
+  <div class="section-header">
+    <span class="section-number">🧠</span>
+    <h2>Quick Quiz — Test Yourself</h2>
+  </div>
+
+  <div class="quiz-card" id="q1">
+    <div class="quiz-q">Q1. The number of ROWS in a relation is called the __?</div>
+    <div class="quiz-options">
+      <button class="quiz-btn" onclick="checkQ('q1', this, false)">A. Degree</button>
+      <button class="quiz-btn" onclick="checkQ('q1', this, true)">B. Cardinality</button>
+      <button class="quiz-btn" onclick="checkQ('q1', this, false)">C. Domain</button>
+      <button class="quiz-btn" onclick="checkQ('q1', this, false)">D. Schema</button>
+    </div>
+    <div class="quiz-feedback" id="q1-fb"></div>
+  </div>
+
+  <div class="quiz-card" id="q2">
+    <div class="quiz-q">Q2. Which constraint says the Primary Key cannot be NULL?</div>
+    <div class="quiz-options">
+      <button class="quiz-btn" onclick="checkQ('q2', this, false)">A. Domain Constraint</button>
+      <button class="quiz-btn" onclick="checkQ('q2', this, false)">B. Referential Integrity</button>
+      <button class="quiz-btn" onclick="checkQ('q2', this, true)">C. Entity Integrity</button>
+      <button class="quiz-btn" onclick="checkQ('q2', this, false)">D. Key Constraint</button>
+    </div>
+    <div class="quiz-feedback" id="q2-fb"></div>
+  </div>
+
+  <div class="quiz-card" id="q3">
+    <div class="quiz-q">Q3. Which DDL command removes ALL rows but KEEPS the table structure?</div>
+    <div class="quiz-options">
+      <button class="quiz-btn" onclick="checkQ('q3', this, false)">A. DROP</button>
+      <button class="quiz-btn" onclick="checkQ('q3', this, false)">B. DELETE</button>
+      <button class="quiz-btn" onclick="checkQ('q3', this, true)">C. TRUNCATE</button>
+      <button class="quiz-btn" onclick="checkQ('q3', this, false)">D. ALTER</button>
+    </div>
+    <div class="quiz-feedback" id="q3-fb"></div>
+  </div>
+
+  <div class="quiz-card" id="q4">
+    <div class="quiz-q">Q4. In SQL, HAVING is used with which clause?</div>
+    <div class="quiz-options">
+      <button class="quiz-btn" onclick="checkQ('q4', this, false)">A. WHERE</button>
+      <button class="quiz-btn" onclick="checkQ('q4', this, false)">B. ORDER BY</button>
+      <button class="quiz-btn" onclick="checkQ('q4', this, true)">C. GROUP BY</button>
+      <button class="quiz-btn" onclick="checkQ('q4', this, false)">D. SELECT</button>
+    </div>
+    <div class="quiz-feedback" id="q4-fb"></div>
+  </div>
+
+  <div class="quiz-card" id="q5">
+    <div class="quiz-q">Q5. Which JOIN returns ALL rows from both tables, with NULLs for non-matches?</div>
+    <div class="quiz-options">
+      <button class="quiz-btn" onclick="checkQ('q5', this, false)">A. INNER JOIN</button>
+      <button class="quiz-btn" onclick="checkQ('q5', this, false)">B. LEFT JOIN</button>
+      <button class="quiz-btn" onclick="checkQ('q5', this, false)">C. RIGHT JOIN</button>
+      <button class="quiz-btn" onclick="checkQ('q5', this, true)">D. FULL JOIN</button>
+    </div>
+    <div class="quiz-feedback" id="q5-fb"></div>
+  </div>
+
+  <div class="quiz-card" id="q6">
+    <div class="quiz-q">Q6. In Relational Algebra, the σ (sigma) operator is used for?</div>
+    <div class="quiz-options">
+      <button class="quiz-btn" onclick="checkQ('q6', this, false)">A. Column selection (projection)</button>
+      <button class="quiz-btn" onclick="checkQ('q6', this, true)">B. Row filtering (selection)</button>
+      <button class="quiz-btn" onclick="checkQ('q6', this, false)">C. Renaming</button>
+      <button class="quiz-btn" onclick="checkQ('q6', this, false)">D. Union</button>
+    </div>
+    <div class="quiz-feedback" id="q6-fb"></div>
+  </div>
+
+  <div class="quiz-card" id="q7">
+    <div class="quiz-q">Q7. When converting M:N relationship to relational schema, what do you create?</div>
+    <div class="quiz-options">
+      <button class="quiz-btn" onclick="checkQ('q7', this, false)">A. Add FK to one of the tables</button>
+      <button class="quiz-btn" onclick="checkQ('q7', this, true)">B. A new junction/bridge table</button>
+      <button class="quiz-btn" onclick="checkQ('q7', this, false)">C. Merge both tables</button>
+      <button class="quiz-btn" onclick="checkQ('q7', this, false)">D. Add both FKs to one table</button>
+    </div>
+    <div class="quiz-feedback" id="q7-fb"></div>
+  </div>
+
+  <div class="quiz-card" id="q8">
+    <div class="quiz-q">Q8. A trigger using BEFORE INSERT will fire...</div>
+    <div class="quiz-options">
+      <button class="quiz-btn" onclick="checkQ('q8', this, true)">A. Before the row is inserted</button>
+      <button class="quiz-btn" onclick="checkQ('q8', this, false)">B. After the row is inserted</button>
+      <button class="quiz-btn" onclick="checkQ('q8', this, false)">C. Only if insert fails</button>
+      <button class="quiz-btn" onclick="checkQ('q8', this, false)">D. When the table is created</button>
+    </div>
+    <div class="quiz-feedback" id="q8-fb"></div>
+  </div>
+</section>
+
+</main>
+</div>
+</div>
+
+<div class="footer">
+  DBMS Module 2 Complete Study Guide • All topics covered • Good luck on your exam! 📚
 </div>
 
 <script>
-  // Highlight active sidebar link on scroll
-  const sections = document.querySelectorAll('.section');
-  const links = document.querySelectorAll('.sidebar a');
-  window.addEventListener('scroll', () => {
-    let current = '';
-    sections.forEach(s => {
-      if (window.scrollY >= s.offsetTop - 80) current = s.id;
+const feedbacks = {
+  q1: "✅ Cardinality = number of rows (tuples). Degree = number of columns (attributes).",
+  q2: "✅ Entity Integrity Constraint — the primary key must never be NULL so every row can be uniquely identified.",
+  q3: "✅ TRUNCATE removes all rows but keeps the table structure intact. DROP removes the table entirely.",
+  q4: "✅ HAVING works with GROUP BY to filter grouped results. WHERE filters individual rows before grouping.",
+  q5: "✅ FULL (OUTER) JOIN returns all rows from both tables. Non-matching sides get NULL values.",
+  q6: "✅ σ (sigma) = Selection = filters ROWS. ∏ (pi) = Projection = selects COLUMNS.",
+  q7: "✅ M:N relationships require a new junction table whose PK is the combined FKs of both related tables.",
+  q8: "✅ BEFORE triggers fire BEFORE the DML operation. Useful for validation or auto-calculating values."
+};
+
+function checkQ(qid, btn, isCorrect) {
+  const card = document.getElementById(qid);
+  const btns = card.querySelectorAll('.quiz-btn');
+  btns.forEach(b => b.style.pointerEvents='none');
+  const fb = document.getElementById(qid+'-fb');
+  if(isCorrect){
+    btn.classList.add('correct');
+    fb.textContent = feedbacks[qid];
+    fb.className = 'quiz-feedback show ok';
+  } else {
+    btn.classList.add('wrong');
+    fb.textContent = "❌ Not quite. " + feedbacks[qid];
+    fb.className = 'quiz-feedback show no';
+    btns.forEach(b => {
+      if(b.getAttribute('onclick').includes('true')) b.classList.add('correct');
     });
-    links.forEach(l => {
-      l.classList.remove('active');
-      if (l.getAttribute('href') === '#' + current) l.classList.add('active');
-    });
-  });
+  }
+}
+
+// Smooth scroll helper
+function scrollTo(id) {
+  document.querySelector(id).scrollIntoView({behavior:'smooth'});
+}
 </script>
 </body>
 </html>
